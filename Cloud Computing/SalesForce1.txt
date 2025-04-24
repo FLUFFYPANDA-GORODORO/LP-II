@@ -1,0 +1,78 @@
+public class calc_class {
+    public Double val1 {get; set;}
+    public Double val2 {get; set;}
+    public Double result {get; set;}
+    public String func {get; set;}
+   
+    // Constructor should match class name and have return type void is implicit
+    public calc_class() {
+        // Initialize variables if needed
+        val1 = 0.0;
+        val2 = 0.0;
+        result = 0.0;
+        func = '';
+    }
+   
+    public void finds() {
+        if (func == 'add') {
+            result = val1 + val2;
+        }
+        else if (func == 'sub') {
+            result = val1 - val2;
+        }
+        else if (func == 'div') {
+            // Add null and divide by zero check
+            if (val2 != null && val2 != 0) {
+                result = val1 / val2;
+            } else {
+                result = null; // or handle error differently
+            }
+        }
+        else { // Assuming this is for modulo operation
+            // Add null check
+            if (val1 != null && val2 != null && val2 != 0) {
+                Integer temp = Math.mod(Integer.valueOf(val1), Integer.valueOf(val2));
+                result = Double.valueOf(temp);
+            } else {
+                result = null; // or handle error differently
+            }
+        }
+    }
+}
+
+
+
+Code 2
+
+<apex:page controller="BookController">
+    <apex:form >
+        <!-- Form to create a new book -->
+        <apex:pageBlock title="Create New Book">
+            <apex:pageBlockSection columns="2">
+                <!-- Input fields for book title, author, and publication year -->
+                <apex:inputField value="{!newBook.title__c}" label="Book Title"/>
+                <apex:inputField value="{!newBook.Author__c}" label="Author"/>
+                <apex:inputField value="{!newBook.Publication_year__c}" label="Publication Year"/>
+            </apex:pageBlockSection>
+            <!-- Save button -->
+            <apex:commandButton value="Save Book" action="{!saveBook}"/>
+        </apex:pageBlock>
+
+        <!-- Display existing books -->
+        <apex:pageBlock title="Existing Books">
+            <apex:pageBlockTable value="{!books}" var="book">
+                <apex:column value="{!book.title__c}" headerValue="Book Title"/>
+                <apex:column value="{!book.Author__c}" headerValue="Author"/>
+                <apex:column value="{!book.Publication_year__c}" headerValue="Publication Year"/>
+                <apex:column >
+                    <!-- Update button for each book, pass specific book to updateBook method -->
+                    <apex:commandButton value="Update" action="{!updateBook}" 
+                                        reRender="bookList" 
+                                        onclick="return confirm('Are you sure you want to update this book?');">
+                        <apex:param name="bookId" value="{!book.Id}" assignTo="{!book.Id}"/>
+                    </apex:commandButton>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
