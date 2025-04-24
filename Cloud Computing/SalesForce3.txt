@@ -1,0 +1,84 @@
+Code 1
+
+public class calc_class {
+    public Double val1 {get; set;}
+    public Double val2 {get; set;}
+    public Double result {get; set;}
+    public String func {get; set;}
+   
+    // Constructor should match class name and have return type void is implicit
+    public calc_class() {
+        // Initialize variables if needed
+        val1 = 0.0;
+        val2 = 0.0;
+        result = 0.0;
+        func = '';
+    }
+   
+    public void finds() {
+        if (func == 'add') {
+            result = val1 + val2;
+        }
+        else if (func == 'sub') {
+            result = val1 - val2;
+        }
+        else if (func == 'div') {
+            // Add null and divide by zero check
+            if (val2 != null && val2 != 0) {
+                result = val1 / val2;
+            } else {
+                result = null; // or handle error differently
+            }
+        }
+        else { // Assuming this is for modulo operation
+            // Add null check
+            if (val1 != null && val2 != null && val2 != 0) {
+                Integer temp = Math.mod(Integer.valueOf(val1), Integer.valueOf(val2));
+                result = Double.valueOf(temp);
+            } else {
+                result = null; // or handle error differently
+            }
+        }
+    }
+}
+
+
+Code 2
+
+<apex:page controller="calc_class">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockSection columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Value 1"/>
+                    <apex:inputText value="{!val1}"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Value 2"/>
+                    <apex:inputText value="{!val2}"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Operation"/>
+                    <apex:selectRadio value="{!func}" layout="pageDirection">
+                        <apex:selectOption itemValue="add" itemLabel="Add"/>
+                        <apex:selectOption itemValue="sub" itemLabel="Subtract"/>
+                        <apex:selectOption itemValue="div" itemLabel="Division"/>
+                        <apex:selectOption itemValue="mod" itemLabel="Modulo"/>
+                    </apex:selectRadio>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Result"/>
+                    <apex:outputText value="{!result}" id="res"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Find" action="{!finds}" rerender="res" status="sts"/>
+                <apex:actionStatus id="sts" startText="Calculating..."/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
